@@ -1,116 +1,3 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#11151c">
-<title>Last 1 Percent — Ultimate Survival</title>
-<style>
-:root{--bg:#11151c;--panel:#1b2330;--line:#3c4b60;--gold:#ffd166;--red:#ff5d73;--green:#65e6a7;--text:#f2f5f9;--blue:#5ba5e8}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;touch-action:none}canvas{display:block;width:100%;height:100%;background:#202e24}button{font:700 13px system-ui;border:1px solid #56667b;background:#263346;color:white;border-radius:10px;padding:9px 12px;touch-action:manipulation;cursor:pointer}button:active{transform:scale(.96)}button.primary{background:#d49b27;color:#15191f;border-color:#ffe09a}button:disabled{opacity:.4}.hud{position:absolute;inset:0;pointer-events:none}.topbar{position:absolute;top:8px;left:8px;right:8px;display:flex;justify-content:space-between;gap:6px;align-items:flex-start}.stats{background:#111923e6;border:1px solid #536174;border-radius:12px;padding:8px 10px;min-width:140px;font-size:11px;line-height:1.4}.bar{height:7px;background:#3b414b;border-radius:10px;overflow:hidden;margin-top:2px}.fill{height:100%;width:100%;background:var(--green);transition:width .12s}.fill.hp{background:var(--red)}.fill.xp{background:#7db6ff}.topbuttons{display:flex;gap:5px;pointer-events:auto;flex-wrap:wrap;justify-content:flex-end}.topbuttons button{padding:7px 9px;font-size:11px}.bottom{position:absolute;bottom:12px;left:12px;right:12px;display:flex;align-items:flex-end;justify-content:space-between}.stick{width:120px;height:120px;border:2px solid #ffffff44;background:#11192355;border-radius:50%;position:relative;pointer-events:auto;touch-action:none}.knob{width:46px;height:46px;border-radius:50%;position:absolute;left:37px;top:37px;background:#dce8f0aa;border:2px solid white;box-shadow:0 2px 10px #0006}.actions{display:grid;grid-template-columns:repeat(2,58px);gap:6px;pointer-events:auto}.act{width:58px;height:54px;border-radius:50%;padding:2px;background:#182333dd;border:2px solid #c4d0dd;font-size:10px}.act.attack{background:#873447e8}.act.dodge{background:#275a74e8}.act.block{background:#3e4a63e8}.act.grenade{background:#9e6327e8}.hint{position:absolute;left:50%;bottom:145px;transform:translateX(-50%);font-size:10px;background:#101722c9;padding:5px 8px;border-radius:8px;white-space:nowrap;color:#dbe3ec}.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#070b11dd;padding:12px;pointer-events:auto}.panel{width:min(500px,100%);max-height:86%;overflow:auto;background:linear-gradient(150deg,#202c3c,#121923);border:1px solid #617086;border-radius:18px;padding:18px;box-shadow:0 15px 50px #000a}.panel h1,.panel h2{margin:0 0 6px;font-size:20px}.panel p{color:#c3cedb;line-height:1.4;font-size:13px}.row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.row button{flex:1}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:10px}.item{background:#172231;border:1px solid #42536a;border-radius:10px;padding:8px;font-size:12px}.item small{display:block;color:#b5c1d0;margin:4px 0}.item button{width:100%;padding:6px}.toast{position:absolute;top:85px;left:50%;transform:translateX(-50%);background:#101721ed;border:1px solid #66768a;border-radius:8px;padding:8px 12px;font-size:12px;pointer-events:none;max-width:90%;text-align:center;z-index:99}.minimap{position:absolute;top:75px;right:10px;width:110px;height:110px;background:#111923cc;border:2px solid #536174;border-radius:50%;overflow:hidden;pointer-events:none}.profilegrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:10px 0}.profilecard{background:#172231;border:1px solid #42536a;border-radius:10px;padding:8px}.profilecard button{width:100%;margin-top:5px}.profilecard small{color:#b5c1d0}.profileline{display:flex;gap:6px;align-items:center;margin:6px 0}.profileline input,.profileline select{min-width:0;flex:1;background:#101923;color:#fff;border:1px solid #56667b;border-radius:8px;padding:8px}@media(min-width:800px){.stick{width:140px;height:140px}.knob{left:47px;top:47px}.actions{grid-template-columns:repeat(4,58px)}.hint{bottom:160px}}
-</style></head>
-<body>
-<canvas id="game"></canvas>
-<div class="minimap"><canvas id="miniCanvas" width="110" height="110"></canvas></div>
-<div class="hud" id="hud">
- <div class="topbar">
-  <div class="stats">
-   <div><b>LAST 1 PERCENT</b> <span id="waveLabel">· DAY 1</span></div>
-   <div>HP <b id="hpText">100/100</b></div>
-   <div class="bar"><div class="fill hp" id="hpFill"></div></div>
-   <div>XP <b id="xpText">0/100</b> · Coins <b id="coinText">0</b></div>
-   <div>☠ Kills <b id="killText">0</b> · Combo <b id="comboText">0</b></div>
-   <div class="bar"><div class="fill xp" id="xpFill" style="width:0%"></div></div>
-  </div>
-  <div class="topbuttons">
-   <button id="multiBtn">🌐 MULTI</button>
-   <button id="rankBtn">🏆 RANK</button>
-   <button id="profileBtn">👤 PROFILE</button>
-   <button id="bagBtn">🎒 BAG</button>
-   <button id="pauseBtn">Ⅱ PAUSE</button>
-   <button id="soundBtn">🔊 SOUND</button>
-  </div>
- </div>
- <div class="hint" id="hint">Move joystick · Drag right screen to look</div>
- <div class="bottom">
-  <div class="stick" id="stick"><div class="knob" id="knob"></div></div>
-  <div class="actions">
-   <button class="act attack" id="lightBtn">⚔ LIGHT</button>
-   <button class="act attack" id="heavyBtn">💥 HEAVY</button>
-   <button class="act dodge" id="dodgeBtn">➤ DASH</button>
-   <button class="act grenade" id="grenadeBtn">💣 BOMB</button>
-  </div>
- </div>
-</div>
-<div class="toast hidden" id="toast"></div>
-
-<!-- Menus -->
-<div class="overlay" id="menu">
- <div class="panel">
-  <h1>⚔ Last 1 Percent</h1>
-  <p>Survive the infected wasteland with silly weapons, loyal pets, online co-op rooms, and global ranking tiers with rewards!</p>
-  <div class="row">
-   <button class="primary" id="startBtn">▶ START SURVIVING</button>
-   <button id="continueBtn">CONTINUE</button>
-  </div>
-  <div class="row">
-   <button id="menuMultiBtn">🌐 MULTIPLAYER ROOMS</button>
-   <button id="menuRankBtn">🏆 GLOBAL LEADERBOARD</button>
-  </div>
- </div>
-</div>
-
-<div class="overlay hidden" id="pauseMenu"><div class="panel"><h2>Paused</h2><p>Take a breath. The wasteland can wait.</p><div class="row"><button class="primary" id="resumeBtn">RESUME</button><button id="saveBtn">SAVE NOW</button><button id="mainMenuBtn">MAIN MENU</button></div></div></div>
-
-<div class="overlay hidden" id="profileMenu">
- <div class="panel">
-  <h2>👤 Survivor Profile & Pets</h2>
-  <p>Customize your identity, equip weapon skins, and choose a loyal companion pet!</p>
-  <div class="profileline"><label for="playerName">Name</label><input id="playerName" maxlength="16" placeholder="Survivor"></div>
-  <div class="profileline"><label for="countrySelect">Country</label><select id="countrySelect"><option value="🇲🇲">🇲🇲 Myanmar</option><option value="🇹🇭">🇹🇭 Thailand</option><option value="🇮🇳">🇮🇳 India</option><option value="🇺🇸">🇺🇸 United States</option><option value="🇬🇧">🇬🇧 UK</option><option value="🇯🇵">🇯🇵 Japan</option><option value="🇰🇷">🇰🇷 South Korea</option></select></div>
-  <h3>Companion Pet</h3>
-  <div class="profilegrid" id="petList"></div>
-  <h3>Outfits</h3>
-  <div class="profilegrid" id="skinList"></div>
-  <div class="row"><button id="saveProfileBtn" class="primary">SAVE PROFILE</button><button id="closeProfileBtn">CLOSE</button></div>
- </div>
-</div>
-
-<div class="overlay hidden" id="bagMenu">
- <div class="panel">
-  <h2>🎒 Arsenal & Upgrades</h2>
-  <p>Unlock hilarious weapons like the Chicken Launcher or Banana Gun, and upgrade damage!</p>
-  <div id="weaponList" class="grid"></div>
-  <div class="row"><button id="upgradeBtn" class="primary">⬆ Upgrade Weapon</button><button id="closeBagBtn">CLOSE</button></div>
-  <p id="bagInfo" class="mobile-note"></p>
- </div>
-</div>
-
-<div class="overlay hidden" id="rankMenu">
- <div class="panel">
-  <h2>🏆 Global Leaderboard & Tier Rewards</h2>
-  <p>Compete worldwide! Climb Tiers: Bronze, Silver, Gold, Platinum, Diamond, Master, Grandmaster, Survivor Legend.</p>
-  <div id="tierBox" style="background:#172231;border:1px solid #536174;border-radius:10px;padding:10px;margin-bottom:10px;text-align:center"></div>
-  <div id="leaderboardList" style="max-height:220px;overflow-y:auto"></div>
-  <div class="row"><button id="claimRewardBtn" class="primary">CLAIM TIER REWARD</button><button id="closeRankBtn">CLOSE</button></div>
- </div>
-</div>
-
-<div class="overlay hidden" id="multiMenu">
- <div class="panel">
-  <h2>🌐 Online Co-Op Rooms</h2>
-  <p>Join or create a live room to fight zombies together with friends online!</p>
-  <div class="profileline"><input id="roomCodeInput" placeholder="Enter Room Code (e.g. SURVIVE99)"><button id="joinRoomBtn" class="primary">JOIN ROOM</button></div>
-  <div class="row"><button id="createRoomBtn" class="primary">CREATE NEW ROOM</button><button id="closeMultiBtn">CLOSE</button></div>
-  <p id="roomStatus" class="mobile-note" style="text-align:center;margin-top:10px">Status: Offline / Singleplayer</p>
- </div>
-</div>
-
-<div class="overlay hidden" id="endMenu">
- <div class="panel">
-  <h2 id="endTitle">Run ended</h2>
-  <p id="endText"></p>
-  <div class="row"><button class="primary" id="againBtn">PLAY AGAIN</button><button id="endMenuBtn">MAIN MENU</button></div>
- </div>
-</div>
-
 <script>
 (()=>{'use strict';
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
@@ -151,8 +38,20 @@ let state={
  skin:0,skinUnlocked:[0],pet:0,grenades:3,roomCode:''
 };
 
-let saved=(()=>{try{return JSON.parse(localStorage.getItem('last1percent_save_v2')||'null')}catch(e){return null}})();
-if(saved&&typeof saved==='object'){state={...state,...saved,running:false,paused:false,dead:false};state.unlocked=Array.isArray(state.unlocked)?state.unlocked:[0]}
+try{
+ let saved=JSON.parse(localStorage.getItem('last1percent_save_v2')||'null');
+ if(saved&&typeof saved==='object'){
+  state={...state,...saved};
+  state.unlocked=Array.isArray(state.unlocked)?state.unlocked:[0];
+  state.skinUnlocked=Array.isArray(state.skinUnlocked)?state.skinUnlocked:[0];
+ }
+}catch(e){localStorage.removeItem('last1percent_save_v2');}
+
+state.running=false;
+state.paused=false;
+state.dead=false;
+if(!state.maxHp||isNaN(state.maxHp)||state.maxHp<=0)state.maxHp=100;
+state.hp=state.maxHp;
 
 let player={x:0,y:0,angle:0,r:15,speed:130,attack:0,attackType:'light',cooldown:0,dodge:0,block:false,flash:0};
 let zombies=[],particles=[],floatTexts=[],items=[];
@@ -164,9 +63,9 @@ const world={w:2400,h:2400};
 function rand(a,b){return a+Math.random()*(b-a)}
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
 function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
-function save(){try{localStorage.setItem('last1percent_save_v2',JSON.stringify({...state,running:false,paused:false,dead:false}));notify('Progress saved!')}catch(e){}}
+function save(){try{localStorage.setItem('last1percent_save_v2',JSON.stringify({...state,running:false,paused:false,dead:false}));}catch(e){}}
 function notify(s){ui.toast.textContent=s;ui.toast.classList.remove('hidden');toastTimer=2.3}
-function setOverlay(which){Object.values(ui).forEach(e=>{if(e.classList)e.classList.add('hidden')});if(which)which.classList.remove('hidden')}
+function setOverlay(which){Object.values(ui).forEach(e=>{if(e&&e.classList)e.classList.add('hidden')});if(which)which.classList.remove('hidden')}
 
 function resetRun(){
  combo=0;comboTimer=0;floatTexts=[];items=[];zombies=[];particles=[];
@@ -191,14 +90,16 @@ function spawnZombie(){
 }
 
 function updateUI(){
- $('hpText').textContent=Math.max(0,Math.ceil(state.hp))+'/'+state.maxHp;
- $('hpFill').style.width=clamp(state.hp/state.maxHp*100,0,100)+'%';
- $('xpText').textContent=state.xp+'/'+(state.level*100);
- $('xpFill').style.width=clamp(state.xp/(state.level*100)*100,0,100)+'%';
- $('coinText').textContent=state.coins;
- $('killText').textContent=state.kills;
- $('comboText').textContent=combo;
- $('waveLabel').textContent='· DAY '+state.day;
+ try{
+  $('hpText').textContent=Math.max(0,Math.ceil(state.hp))+'/'+state.maxHp;
+  $('hpFill').style.width=clamp(state.hp/state.maxHp*100,0,100)+'%';
+  $('xpText').textContent=state.xp+'/'+(state.level*100);
+  $('xpFill').style.width=clamp(state.xp/(state.level*100)*100,0,100)+'%';
+  $('coinText').textContent=state.coins;
+  $('killText').textContent=state.kills;
+  $('comboText').textContent=combo;
+  $('waveLabel').textContent='· DAY '+state.day;
+ }catch(e){}
 }
 
 function addXP(n){
@@ -213,7 +114,7 @@ function addXP(n){
 function attack(type){
  if(!state.running||state.paused||state.dead||player.cooldown>0)return;
  player.attack=.22;player.attackType=type;player.cooldown=type==='heavy'?.65:.32;
- const weapon=weapons[state.weapon];
+ const weapon=weapons[state.weapon]||weapons[0];
  let dmg=(weapon.damage+state.upgrade*7)*(type==='heavy'?1.7:1);
  let range=weapon.kind==='gun'?weapon.range:(type==='heavy'?Math.max(95,weapon.range||75):Math.max(75,weapon.range||75));
  let hitCount=0;
@@ -331,7 +232,10 @@ function update(dt){
  camera.x+=(player.x-camera.x)*Math.min(1,dt*6);
  camera.y+=(player.y-camera.y)*Math.min(1,dt*6);
 
- if(toastTimer>0){toastTimer-=dt;if(toastTimer<=0)ui.toast.classList.add('hidden')}
+ if(toastTimer>0){
+  toastTimer-=dt;
+  if(toastTimer<=0) ui.toast.classList.add('hidden');
+ }
 }
 
 function draw(){
@@ -341,4 +245,192 @@ function draw(){
  ctx.translate(W/2-camera.x,H/2-camera.y);
 
  ctx.strokeStyle='#ffffff08';ctx.lineWidth=1;let step=120;
- for(let x=-world.w/2;x<=world.w/2;x+=step){ctx.beginPath();ctx.moveTo(x,-world.h/2);ctx.
+ for(let x=-world.w/2;x<=world.w/2;x+=step){ctx.beginPath();ctx.moveTo(x,-world.h/2);ctx.lineTo(x,world.h/2);ctx.stroke()}
+ for(let y=-world.h/2;y<=world.h/2;y+=step){ctx.beginPath();ctx.moveTo(-world.h/2,y);ctx.lineTo(world.h/2,y);ctx.stroke()}
+
+ for(const it of items){
+  ctx.fillStyle=it.type==='hp'?'#ff5d73':'#ffd166';
+  ctx.beginPath();ctx.arc(it.x,it.y,8,0,Math.PI*2);ctx.fill();
+ }
+
+ for(const z of zombies){
+  if(z.dead)continue;
+  ctx.save();ctx.translate(z.x,z.y);
+  ctx.fillStyle='#0004';ctx.beginPath();ctx.ellipse(2,z.r*.7,z.r,z.r*.5,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=z.hit?'#fff':z.color;
+  ctx.beginPath();ctx.arc(0,0,z.r,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#e65e67';ctx.fillRect(-z.r,z.r+4,z.r*2,3);
+  ctx.fillStyle='#65e6a7';ctx.fillRect(-z.r,z.r+4,z.r*2*clamp(z.hp/z.maxHp,0,1),3);
+  ctx.restore();
+ }
+
+ ctx.save();ctx.translate(player.x,player.y);
+ ctx.fillStyle='#0005';ctx.beginPath();ctx.ellipse(2,8,16,9,0,0,Math.PI*2);ctx.fill();
+ ctx.rotate(player.angle);
+ let skinColors=['#5ba5e8','#ffd166','#ff5d73','#65e6a7'];
+ ctx.fillStyle=player.flash?'#fff':(skinColors[state.skin]||skinColors[0]);
+ ctx.beginPath();ctx.arc(0,0,player.r,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#dbefff';ctx.beginPath();ctx.arc(5,-3,4,0,Math.PI*2);ctx.fill();
+
+ let wpn=weapons[state.weapon]||weapons[0];
+ if(wpn.kind==='gun'){
+  ctx.fillStyle='#c3ccd6';ctx.fillRect(8,0,18,6);
+ }else{
+  ctx.strokeStyle='#f1d19a';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(8,3);ctx.lineTo(24,3);ctx.stroke();
+ }
+ ctx.restore();
+
+ for(const p of particles){ctx.globalAlpha=clamp(p.life/.3,0,1);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,3,3)}
+ for(const f of floatTexts){ctx.globalAlpha=clamp(f.life/0.35,0,1);ctx.fillStyle=f.color;ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillText(f.text,f.x,f.y)}
+ ctx.globalAlpha=1;ctx.restore();
+
+ drawMinimap();
+}
+
+function drawMinimap(){
+ miniCtx.clearRect(0,0,110,110);
+ miniCtx.fillStyle='#111923';miniCtx.fillRect(0,0,110,110);
+ let scale=110/world.w;
+ for(const z of zombies){
+  if(z.dead)continue;
+  let mx=55+(z.x-player.x)*scale,my=55+(z.y-player.y)*scale;
+  if(mx>=0&&mx<=110&&my>=0&&my<=110){miniCtx.fillStyle='#ff5d73';miniCtx.fillRect(mx-1,my-1,2,2)}
+ }
+ miniCtx.fillStyle='#65e6a7';miniCtx.beginPath();miniCtx.arc(55,55,3,0,Math.PI*2);miniCtx.fill();
+}
+
+function loop(t){
+ let dt=Math.min(.033,(t-(loop.last||t))/1000);
+ loop.last=t;update(dt);draw();requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+const stick=$('stick'),knob=$('knob');
+function setStick(e){
+ let r=stick.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,max=r.width*.35,len=Math.hypot(dx,dy)||1;
+ if(len>max){dx=dx/len*max;dy=dy/len*max}
+ move.x=dx/max;move.y=dy/max;knob.style.transform=`translate(${dx}px,${dy}px)`;
+}
+function resetStick(){stickPointer=null;move.x=move.y=0;knob.style.transform='translate(0,0)'}
+if(stick){
+ stick.addEventListener('pointerdown',e=>{stickPointer=e.pointerId;stick.setPointerCapture(e.pointerId);setStick(e)});
+ stick.addEventListener('pointermove',e=>{if(stickPointer===e.pointerId)setStick(e)});
+ stick.addEventListener('pointerup',e=>{if(stickPointer===e.pointerId)resetStick()});
+ stick.addEventListener('pointercancel',resetStick);
+}
+
+canvas.addEventListener('pointerdown',e=>{if(e.clientX>W*.4&&e.clientY>80&&e.clientY-140){dragLook=true;lookLastX=e.clientX;canvas.setPointerCapture(e.pointerId)}});
+canvas.addEventListener('pointermove',e=>{if(dragLook){let dx=e.clientX-lookLastX;player.angle+=dx*.008;lookLastX=e.clientX}});
+canvas.addEventListener('pointerup',()=>dragLook=false);
+
+addEventListener('keydown',e=>{keys[e.code]=true;if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();if(e.code==='KeyJ')attack('light');if(e.code==='KeyK')attack('heavy');if(e.code==='KeyL')throwGrenade()});
+addEventListener('keyup',e=>{keys[e.code]=false});
+
+$('lightBtn').onclick=()=>attack('light');
+$('heavyBtn').onclick=()=>attack('heavy');
+$('dodgeBtn').onclick=()=>{if(player.dodge<=0){player.dodge=.25;playSound(300,.04)}};
+$('grenadeBtn').onclick=throwGrenade;
+
+$('startBtn').onclick=resetRun;
+$('continueBtn').onclick=()=>{resetRun();notify('Welcome back!')};
+$('pauseBtn').onclick=()=>{if(!state.running)return;state.paused=true;setOverlay(ui.pause)};
+$('resumeBtn').onclick=()=>{state.paused=false;setOverlay(null)};
+$('saveBtn').onclick=save;
+$('mainMenuBtn').onclick=()=>{state.running=false;setOverlay(ui.menu)};
+
+$('bagBtn').onclick=()=>{state.paused=true;renderBag();setOverlay(ui.bag)};
+$('closeBagBtn').onclick=()=>{state.paused=false;setOverlay(null)};
+$('upgradeBtn').onclick=()=>{
+ let cost=Math.floor(150*Math.pow(1.7,state.upgrade));
+ if(state.coins<cost){notify('Need '+cost+' coins!');return}
+ state.coins-=cost;state.upgrade++;notify('Weapon upgraded!');renderBag();updateUI();save();
+};
+
+$('profileBtn').onclick=()=>{state.paused=true;renderProfile();setOverlay(ui.profile)};
+$('menuMultiBtn').onclick=()=>setOverlay(ui.multi);
+$('multiBtn').onclick=()=>{state.paused=true;setOverlay(ui.multi)};
+$('closeMultiBtn').onclick=()=>{state.paused=false;setOverlay(null)};
+$('closeProfileBtn').onclick=()=>{state.paused=false;setOverlay(null)};
+$('saveProfileBtn').onclick=()=>{
+ state.playerName=$('playerName').value.trim().slice(0,16)||'Survivor';
+ state.countryFlag=$('countrySelect').value;
+ save();setOverlay(null);state.paused=false;notify('Profile saved!');
+};
+
+$('menuRankBtn').onclick=()=>{renderRank();setOverlay(ui.rank)};
+$('rankBtn').onclick=()=>{state.paused=true;renderRank();setOverlay(ui.rank)};
+$('closeRankBtn').onclick=()=>{state.paused=false;setOverlay(null)};
+
+$('againBtn').onclick=resetRun;
+$('endMenuBtn').onclick=()=>setOverlay(ui.menu);
+
+function renderBag(){
+ let html='';
+ weapons.forEach((w,i)=>{
+  let owned=state.unlocked.includes(i),equipped=state.weapon===i;
+  html+=`<div class="item"><b>${w.name}${equipped?' ✓':''}</b><small>${w.desc}</small>${owned?`<button data-equip="${i}" ${equipped?'disabled':''}>${equipped?'EQUIPPED':'EQUIP'}</button>`:`<button data-buy="${i}" ${state.coins<w.cost?'disabled':''}>Unlock (${w.cost}C)</button>`}</div>`;
+ });
+ $('weaponList').innerHTML=html;
+ $('bagInfo').textContent='Coins: '+state.coins+' · Upgrade Bonus: +'+(state.upgrade*7)+' DMG';
+ $('weaponList').querySelectorAll('[data-equip]').forEach(b=>b.onclick=()=>{state.weapon=+b.dataset.equip;renderBag();save();notify('Equipped!')});
+ $('weaponList').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{
+  let i=+b.dataset.buy,w=weapons[i];
+  if(state.coins<w.cost)return;
+  state.coins-=w.cost;state.unlocked.push(i);state.weapon=i;updateUI();renderBag();save();notify('Unlocked!');
+ });
+}
+
+function renderProfile(){
+ $('playerName').value=state.playerName;$('countrySelect').value=state.countryFlag;
+ let skinHtml='';
+ skins.forEach((sk,i)=>{
+  let owned=(state.skinUnlocked||[0]).includes(i),active=state.skin===i;
+  skinHtml+=`<div class="profilecard"><b>${sk.name}</b><small>${owned?'Owned':sk.cost+'C'}</small><button data-skin="${i}" ${active?'disabled':''}>${active?'EQUIPPED':owned?'EQUIP':'BUY'}</button></div>`;
+ });
+ $('skinList').innerHTML=skinHtml;
+
+ let petHtml='';
+ pets.forEach((p,i)=>{
+  let active=state.pet===i;
+  petHtml+=`<div class="profilecard"><b>${p.name}</b><small>${p.buff}</small><button data-pet="${i}" ${active?'disabled':''}>${active?'ACTIVE':'SELECT'}</button></div>`;
+ });
+ $('petList').innerHTML=petHtml;
+
+ $('skinList').querySelectorAll('[data-skin]').forEach(b=>b.onclick=()=>{
+  let i=+b.dataset.skin;
+  if(!state.skinUnlocked.includes(i)){
+   if(state.coins<skins[i].cost){notify('Not enough coins');return}
+   state.coins-=skins[i].cost;state.skinUnlocked.push(i);
+  }
+  state.skin=i;renderProfile();save();
+ });
+ $('petList'].querySelectorAll('[data-pet]').forEach(b=>b.onclick=()=>{
+  state.pet=+b.dataset.pet;renderProfile();save();notify('Pet selected!');
+ });
+}
+
+function renderRank(){
+ let score=state.score||0;
+ let tier='Bronze 🥉';
+ if(score>500)tier='Silver 🥈';
+ if(score>1500)tier='Gold 🥇';
+ if(score>3500)tier='Platinum 💠';
+ if(score>7000)tier='Diamond 💎';
+ if(score>12000)tier='Survivor Legend 👑';
+
+ $('tierBox').innerHTML=`<h3>Your Tier: ${tier}</h3><p>Total Score: ${score} · Kills: ${state.kills}</p>`;
+ $('leaderboardList').innerHTML=`
+  <div class="item" style="margin-bottom:4px">1. 🇲🇲 Zaw Min (Legend) - 18,450 pts</div>
+  <div class="item" style="margin-bottom:4px">2. 🇹🇭 Somchai (Master) - 14,200 pts</div>
+  <div class="item" style="margin-bottom:4px">3. 🇺🇸 John Doe (Diamond) - 9,800 pts</div>
+  <div class="item" style="margin-bottom:4px">4. ${state.countryFlag} ${state.playerName} (You) - ${score} pts</div>
+ `;
+}
+
+$('soundBtn').onclick=()=>{state.sound=!state.sound;$('soundBtn').textContent=state.sound?'🔊 SOUND':'🔇 SOUND'};
+
+setOverlay(ui.menu);
+updateUI();
+})();
+</script>
+</html>
