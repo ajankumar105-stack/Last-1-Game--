@@ -122,7 +122,6 @@ addEventListener('resize',resize);resize();
 const $=id=>document.getElementById(id);
 const ui={menu:$('menu'),pause:$('pauseMenu'),bag:$('bagMenu'),profile:$('profileMenu'),rank:$('rankMenu'),multi:$('multiMenu'),end:$('endMenu'),toast:$('toast')};
 
-// Game Weapons (Including Silly Weapons)
 const weapons=[
  {name:'Rusty Blade',damage:16,cost:0,unlock:0,desc:'Starter melee weapon.',range:75,kind:'melee'},
  {name:'Chicken Launcher',damage:28,cost:150,unlock:1,desc:'Fires explosive clucking chickens!',range:320,kind:'gun'},
@@ -156,7 +155,7 @@ let saved=(()=>{try{return JSON.parse(localStorage.getItem('last1percent_save_v2
 if(saved&&typeof saved==='object'){state={...state,...saved,running:false,paused:false,dead:false};state.unlocked=Array.isArray(state.unlocked)?state.unlocked:[0]}
 
 let player={x:0,y:0,angle:0,r:15,speed:130,attack:0,attackType:'light',cooldown:0,dodge:0,block:false,flash:0};
-let zombies=[],particles=[],floatTexts=[],items=[],onlinePlayers=[];
+let zombies=[],particles=[],floatTexts=[],items=[];
 let combo=0,comboTimer=0;
 let camera={x:0,y:0};
 let keys={},move={x:0,y:0},stickPointer=null,dragLook=false,lookLastX=0,spawnTimer=0,dayTimer=0,toastTimer=0;
@@ -300,7 +299,6 @@ function update(dt){
  if(spawnTimer<=0&&zombies.filter(z=>!z.dead).length<16){spawnZombie();spawnTimer=Math.max(.8,2.2-state.day*.05)}
  if(comboTimer>0){comboTimer-=dt;if(comboTimer<=0)combo=0;}
 
- // Item pickup
  for(const it of items){
   if(dist(player,it)<30){
    if(it.type==='hp'){state.hp=Math.min(state.maxHp,state.hp+it.val);notify('+HP Healed!')}
@@ -310,7 +308,6 @@ function update(dt){
  }
  items=items.filter(it=>!it.collected);
 
- // Zombies AI
  for(const z of zombies){
   if(z.dead)continue;
   z.hit=Math.max(0,z.hit-dt);
@@ -343,5 +340,5 @@ function draw(){
  ctx.save();
  ctx.translate(W/2-camera.x,H/2-camera.y);
 
- // Grid
- ctx.strokeStyle='#ffffff08';ctx.lineWidth=1;let 
+ ctx.strokeStyle='#ffffff08';ctx.lineWidth=1;let step=120;
+ for(let x=-world.w/2;x<=world.w/2;x+=step){ctx.beginPath();ctx.moveTo(x,-world.h/2);ctx.
